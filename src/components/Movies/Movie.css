@@ -1,0 +1,17 @@
+.singleMovie {
+    width: 200px;
+    margin: 10px;
+}
+
+.movieTile {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+h2 {
+    font-size: 1rem;
+}
+
+h3 {
+    font-size: 1rem;
+}
