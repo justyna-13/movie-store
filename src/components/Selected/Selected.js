@@ -1,46 +1,63 @@
 import React, { Component } from "react";
-import { connect } from "react-redux";
-import { fetchMovies } from "../../actions";
+import api from "../api/movies";
 
-import Cart from "../Cart/Cart.js";
-import Button from "../Button";
-
-class Selected extends Component {
-  state = {
-    movies: []
-  };
+export default class Selected extends Component {
+  state = { movies: [], selected: [] };
 
   componentDidMount() {
-    this.props.fetchMovies();
-
     let id = this.props.match.params.id;
 
-    let selectedMovie = this.props.movies.filter(el => {
-      return el.id == id;
-    });
-    this.setState({ movies: selectedMovie[0] });
+    const selectedMovie = async () => {
+      await api
+        .get(`/movie/${id}`)
+        .then(res =>
+          this.setState({
+            id: id,
+            selected: res.data
+          })
+        )
+        .catch(error => console.log(error));
+    };
+    selectedMovie();
   }
 
-  handleCart = () => {
-    console.log("Added id: ", this.state.movies.id);
+  handleClick = async () => {
+    await this.setState({ name: "ANNNNNNA" });
+    console.log(this.state.name);
   };
 
   render() {
-    if (this.state.movies) {
+    if (this.state.selected) {
       return (
         <div style={{ display: "flex" }}>
-          <Cart />
-          <div style={{ maxWidth: "750px" }} className="card">
-            <img
-              src={
-                "https://image.tmdb.org/t/p/w154" +
-                this.state.movies.poster_path
-              }
-              alt="cos"
-            />
-            <h2>{this.state.movies.title}</h2>
-            <h3>{this.state.movies.overview}</h3>
-            <Button addToCart={this.handleCart} />
+          <div
+            className="container"
+            style={{ maxWidth: "750px", marginTop: "30px" }}
+          >
+            <div className="col s12 m6 l4">
+              <div className="card horizontal">
+                <div className="card-image">
+                  <img
+                    src={
+                      "https://image.tmdb.org/t/p/w154" +
+                      this.state.selected.poster_path
+                    }
+                    alt={this.state.selected.original_title}
+                  />
+                </div>
+                <div className="card-stacked">
+                  <div className="card-content ">
+                    <h2 className="header">{this.state.selected.title}</h2>
+                    <p className="center-align ">
+                      {this.state.selected.release_date}
+                    </p>
+                    <p style={{ marginTop: "10px" }} className="center-align ">
+                      {this.state.selected.overview}
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       );
@@ -53,14 +70,3 @@ class Selected extends Component {
     }
   }
 }
-
-const mapStateToProps = state => {
-  return {
-    movies: state.movies
-  };
-};
-
-export default connect(
-  mapStateToProps,
-  { fetchMovies }
-)(Selected);

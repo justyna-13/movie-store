@@ -5,8 +5,8 @@
 }
 
 .App {
-  background-color: #FAFAFA;
-  /* height: 100vh; */
+  background-color: rgb(245, 245, 245);
+  height: 100vh;
 }
 
 .App-logo {

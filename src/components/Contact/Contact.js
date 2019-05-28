@@ -7,11 +7,11 @@ export default class Contact extends Component {
     return (
       <div className="contact">
         <i className="material-icons person">person</i>
-        <h1>CONTACT</h1>
+        <h2>CONTACT</h2>
         <p>mail@mail.pl</p>
-        <a href="tel: 123-456-789">tel. 123-456-789</a>
         <p>tel. 123-456-789</p>
-        <p>ul.Domak</p>
+        <p>tel. 123-456-789</p>
+        <p>ul.Wrocławska</p>
         <p>00-000 Wrocław</p>
       </div>
     );

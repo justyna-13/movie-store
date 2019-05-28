@@ -7,7 +7,7 @@ export default class About extends Component {
     return (
       <div className="about">
         <i className="material-icons person">person</i>
-        <h1>ABOUT</h1>
+        <h2>ABOUT</h2>
         <p>
           Lorem, ipsum dolor sit amet consectetur adipisicing elit. Consectetur,
           quasi amet neque enim commodi a. Nobis, ducimus non neque aliquam

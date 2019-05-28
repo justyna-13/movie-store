@@ -1,22 +1,63 @@
 import React, { Component } from "react";
 
-import Tiles from "../Tiles/Tiles";
 import Cart from "../Cart/Cart.js";
 import "./Home.css";
-import { connect } from "react-redux";
-import { fetchMovies } from "../../actions";
+import Movie from "../Movies/Movie";
+import api from "../api/movies";
 
 class Home extends Component {
+  state = {
+    movie: [],
+    added: []
+  };
+
   componentDidMount() {
-    this.props.fetchMovies();
+    const movies = async () => {
+      await api
+        .get("/discover/movie?")
+        .then(res =>
+          this.setState({
+            movie: res.data.results.slice(0, 8)
+          })
+        )
+        .catch(error => console.log(error));
+    };
+    movies();
   }
 
+  handleAddToCart = (e, product) => {
+    this.setState(state => {
+      const added = state.added;
+      let productAlreadyInCart = false;
+
+      added.forEach(cp => {
+        if (cp.id === product.id) {
+          cp.count += 1;
+          productAlreadyInCart = true;
+        }
+      });
+
+      if (!productAlreadyInCart) {
+        added.push({
+          ...product,
+          count: 1
+        });
+      }
+      return {
+        added: added
+      };
+    });
+  };
+
   render() {
-    if (this.props.movie !== null) {
+    if (this.state.movie !== null) {
       return (
-        <div className="mainView">
-          <Cart />
-          <Tiles />
+        <div className="row mainView">
+          <Cart added={this.state.added} />{" "}
+          <Movie
+            movies={this.state.movie}
+            handleAddToCart={this.handleAddToCart}
+          />{" "}
         </div>
       );
     } else {
@@ -29,13 +70,4 @@ class Home extends Component {
   }
 }
 
-const mapStateToProps = state => {
-  return {
-    movies: state.movies
-  };
-};
-
-export default connect(
-  mapStateToProps,
-  { fetchMovies }
-)(Home);
+export default Home;
